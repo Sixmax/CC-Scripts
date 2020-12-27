@@ -3,7 +3,6 @@ y = 0
 z = 0
 yaw = 0
 
-
 function GetPos() 
     return x, y, z
 end
