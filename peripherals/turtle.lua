@@ -35,5 +35,6 @@ end
 load("localpos", "libraries/localpos.lua")
 load("movement", "libraries/movement.lua")
 load("stripmine", "libraries/stripmine.lua") 
+load("stripmine", "scripts/amazon.lua") 
 
 io.write("Turtle Initialized.\n")
