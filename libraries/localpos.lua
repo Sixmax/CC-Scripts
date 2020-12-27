@@ -1,51 +1,52 @@
+x = 0
+y = 0
+z = 0
+yaw = 0
 
-pos = {x = 0, y = 0, z = 0, yaw = 0}
- 
-function pos:GetPos() 
-    return self.x, self.y, self.z 
+
+function GetPos() 
+    return x, y, z
 end
  
-function pos:GetYaw() 
-    return self.yaw 
+function GetYaw() 
+    return yaw
 end 
  
-function pos:ToString() 
-    return "{" .. self.x .. ", " .. self.y .. ", " .. self.z .. "} || yaw: " .. self.yaw
+function ToString() 
+    return "{" .. x .. ", " .. y .. ", " .. z .. "} || yaw: " .. yaw
 end
  
-function pos:OnMoved() end 
-function pos:_OnMoved() 
-    print(self:ToString()) 
-    self:OnMoved()
+function OnMoved() end 
+local function _OnMoved() 
+    print(ToString()) 
+    OnMoved()
 end
  
-function pos:F(n)
+function F(n)
     n = n or 1
  
-    if self.yaw == 0 or self.yaw == 2 then 
-        self.x = self.x + (self.yaw == 0 and n or -n) 
+    if yaw == 0 or yaw == 2 then 
+        x = x + (yaw == 0 and n or -n) 
     else 
-        self.y = self.y + (self.yaw == 1 and n or -n) 
+        y = y + (yaw == 1 and n or -n) 
     end
  
-    self:_OnMoved()
+    _OnMoved()
 end
  
-function pos:B() 
-    self:F(-1) 
-    self:_OnMoved()
+function B() 
+    F(-1) 
+    _OnMoved()
 end
  
-function pos:L()
-    self.yaw = self.yaw - 1
-    if self.yaw < 0 then self.yaw = 3 end
-    self:_OnMoved()
+function L()
+    yaw = yaw - 1
+    if yaw < 0 then yaw = 3 end
+    _OnMoved()
 end
  
-function pos:R()
-    self.yaw = self.yaw + 1
-    if self.yaw > 3 then self.yaw = 0 end
-    self:_OnMoved()
+function R()
+    yaw = yaw + 1
+    if yaw > 3 then yaw = 0 end
+    _OnMoved()
 end
- 
-return pos 
