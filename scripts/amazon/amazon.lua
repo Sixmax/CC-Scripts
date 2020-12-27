@@ -34,6 +34,21 @@ do -- Location shit
         if yaw > 3 then yaw = 0 end
         _OnMoved()
     end
+    function U()
+        z = z + 1
+        _OnMoved()
+    end
+    function D()
+        z = z - 1
+        _OnMoved()
+    end
+    function getFacing()
+        if yaw == 0 then return "forward" end
+        if yaw == 2 then return "backward" end
+        if yaw == 1 then return "right" end
+        if yaw == 3 then return "left" end 
+        return ""
+    end
 end 
 do -- Movement lib 
     local history = {}
@@ -41,13 +56,13 @@ do -- Movement lib
         if do_backtrack == nil then do_backtrack = true end 
         local fuel = turtle.getFuelLevel()
         if not fuel then return false end 
-        if fuel == #history then 
-            if do_backtrack == true then BackTrack() end
+        if fuel == #history / 2 then 
+            if do_backtrack == true then home() end
             return false 
         end
         return true 
     end
-    function w(len, to_history)
+    function forward(len, to_history)
         if to_history == nil then to_history = true end 
         len = math.max(len or 1, 1)
         for i = 1, len, 1 do 
@@ -59,7 +74,7 @@ do -- Movement lib
             if ValidateFuel() == false then return end   
         end
     end
-    function s(len, to_history)
+    function backward(len, to_history)
         if to_history == nil then to_history = true end 
         len = math.max(len or 1, 1)
         for i = 1, len, 1 do 
@@ -71,7 +86,7 @@ do -- Movement lib
             if ValidateFuel() == false then return end   
         end
     end
-    function a(times, to_history)
+    function rotateLeft(times, to_history)
         if ValidateFuel() == false then return end  
         if to_history == nil then to_history = true end 
         times = math.max(times or 1, 1)
@@ -84,8 +99,34 @@ do -- Movement lib
             if ValidateFuel() == false then return end   
         end
     end
-    function self:d(times, to_history)
-        if self:ValidateFuel() == false then return end  
+    function down(times, to_history)
+        if ValidateFuel() == false then return end  
+        if to_history == nil then to_history = true end 
+        times = math.max(times or 1, 1)
+        for i = 1, times, 1 do 
+            turtle.down() 
+            D()
+            if to_history == true then 
+                table.insert(history, "down")
+            end 
+            if ValidateFuel() == false then return end   
+        end
+    end
+    function up(times, to_history)
+        if ValidateFuel() == false then return end  
+        if to_history == nil then to_history = true end 
+        times = math.max(times or 1, 1)
+        for i = 1, times, 1 do 
+            turtle.up() 
+            U()
+            if to_history == true then 
+                table.insert(history, "up")
+            end 
+            if ValidateFuel() == false then return end   
+        end
+    end
+    function rotateRight(times, to_history)
+        if ValidateFuel() == false then return end  
         if to_history == nil then to_history = true end
         times = math.max(times or 1, 1)
         for i = 1, times, 1 do 
@@ -102,13 +143,17 @@ do -- Movement lib
         while #history > 0 do  
             local entry = history[#history]
             if entry == "forward" then 
-                s(1, false)
+                backward(1, false)
             elseif entry == "back" then 
-                w(1, false)
+                forward(1, false)
             elseif entry == "right" then 
-                a(1, false)
+                rotateLeft(1, false)
             elseif entry == "left" then 
-                d(1, false)
+                rotateRight(1, false)
+            elseif entry == "up" then 
+                down(1, false)
+            elseif enry == "down" then 
+                up(1, false)
             end
             table.remove(history)
             if amount then 
@@ -117,10 +162,27 @@ do -- Movement lib
             end 
         end
     end
+    function home()
+        while true do 
+            if z > 0 then 
+                down(1, false)
+            elseif z < 0 then 
+                up(1, false)
+            else break end 
+        end
+        if y > 0 then 
+            while true do 
+                rotateLeft(1, false) 
+                if getFacing() == "left" then break end  
+            end
+        elseif y < 0 then 
+            while true do 
+                rotateRight(1, false)
+                if getFacing() == "right" then break end  
+            end
+        end
+        while y ~= 0 do forward(1, false) end
+        while getFacing() ~= "forward" do rotateLeft(1, false) end 
+        while x ~= 0 do backward(1, false) end
+    end
 end 
-
-w()
-a()
-s()
-d()
-BackTrack()
