@@ -32,7 +32,8 @@ local function load(file, id)
     io.write("Loaded '" .. file .. "' (" .. id .. ")\n")
 end
  
-load("localPos", "libraries/localpos.lua")
+load("localpos", "libraries/localpos.lua")
 load("movement", "libraries/movement.lua")
- 
+load("stripmine", "libraries/stripmine.lua") 
+
 io.write("Turtle Initialized.\n")

@@ -1,5 +1,5 @@
-os.loadAPI("/sixmax/localpos.lua")
-os.loadAPI("/sixmax/movement.lua")
+require "/sixmax/localpos"
+require "/sixmax/movement"
 
 local function out(s)
     io.write("[SM] " .. s .. "\n")
