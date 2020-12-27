@@ -5,7 +5,7 @@ if fs.exists("/modules.lua") == true then
     io.write("Deleted old modules.lua file.\n")
 end
  
-local response = http.get("http://www.pastebin.com/raw.php?i=ccKjkV4z")
+local response = http.get("https://raw.githubusercontent.com/Sixmax/CC-Scripts/main/modules.lua")
  
 if not response then 
     io.write("Failed to retrieve module lib code! (Check Pastebin)\n")
@@ -32,6 +32,6 @@ local function load(file, id)
     io.write("Loaded '" .. file .. "' (" .. id .. ")\n")
 end
  
-load("/localPos", "YFf0kAkm")
+load("localPos", "libraries/localpos.lua")
  
 io.write("Turtle Initialized.\n")

@@ -11,17 +11,21 @@ function confirm(question)
     return string.lower(io.read()) == "y"
 end
  
+local dir = "/sixmax/"
+
 -- Create a File and return a Handle to set file.
 function createFile(title)
     if not title then return end 
  
-    if fs.exists("/" .. title) == true then 
+    if fs.exists(dir) == false then fs.makeDir(dir)end 
+
+    if fs.exists(dir .. title) == true then 
         if confirm("The File " .. title .. " already exists, do you want to override it?") == true then 
-            fs.delete("/" .. title)
+            fs.delete(dir .. title)
         else return end
     end
  
-    return fs.open(title, "w") 
+    return fs.open(dir .. title, "w") 
 end
  
 function loadPaste(title, id)
@@ -30,8 +34,10 @@ function loadPaste(title, id)
     local handle = createFile(title)
     
     if not handle then return end 
- 
-    local response = http.get("http://www.pastebin.com/raw.php?i=" .. id)
+
+    if string.sub(id, 1, 1) ~= "/" then id = "/" .. id end
+    
+    local response = http.get("https://raw.githubusercontent.com/Sixmax/CC-Scripts/main" .. id)
  
     if not response then 
         io.write("Failed to receive response for " .. id .. "\n")
